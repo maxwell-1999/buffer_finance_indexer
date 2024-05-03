@@ -3,6 +3,7 @@ import { http } from "viem";
 
 import { arbitrumSepolia } from "viem/chains";
 import OptionsAbi from "./abis/OptionsAbi";
+import RouterABI from "./abis/RouterAbi";
 export default createConfig({
   networks: {
     // mainnet: {
@@ -51,8 +52,13 @@ export default createConfig({
         //   startBlock: Number(latestBlockPolygon.number) - 200,
         // },
       },
-      filter: {
-        event: "CreateOptionsContract",
+    },
+    Router: {
+      abi: RouterABI,
+      network: {
+        arbitrumSepolia: {
+          startBlock: 38753772,
+        },
       },
     },
   },
