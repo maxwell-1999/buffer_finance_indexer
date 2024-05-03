@@ -1,7 +1,7 @@
 import { ponder } from "@/generated";
 import { zeroAddress } from "viem";
 import OptionsAbi from "../abis/OptionsAbi";
-import { TestnetUSDCE } from "./Configs/TestnetUSDCE";
+import { TestnetUSDCE } from "./RepoConfigs/TestnetUSDCE";
 import erc20Abi from "../abis/erc20Abi";
 
 ponder.on("Options:CreateOptionsContract", async (args) => {

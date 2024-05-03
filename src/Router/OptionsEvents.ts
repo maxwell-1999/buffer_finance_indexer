@@ -1,9 +1,9 @@
 import { ponder } from "@/generated";
 import { zeroAddress } from "viem";
 import OptionsAbi from "../../abis/OptionsAbi";
-import { TestnetUSDCE } from "../Configs/TestnetUSDCE";
+import { TestnetUSDCE } from "../RepoConfigs/TestnetUSDCE";
 import erc20Abi from "../../abis/erc20Abi";
-import { State } from "../Configs/StateEnum";
+import { State } from "../RepoConfigs/StateEnum";
 import { getId } from "../Utils/getId";
 
 ponder.on("Router:InitiateTrade", async (eventArgs) => {
@@ -46,25 +46,29 @@ ponder.on("Router:OpenTrade", async (eventArgs) => {
       };
     },
   });
-  await UserOptionData.create({
-    id: getId(event.args.targetContract, event.args.optionId),
-    data: {
-      queueID: queuedOptionData.queueID,
-      user: queuedOptionData.user,
-      state: State.active,
-      amount: 0n,
-      expirationTime: queuedOptionData.expirationTime,
-      isAbove: queuedOptionData.isAbove,
-      creationTime: queuedOptionData.queueTimestamp,
-      queuedTimestamp: queuedOptionData.queueTimestamp,
-      lag: queuedOptionData.lag,
-      strike: queuedOptionData.strike,
-      optionContract: queuedOptionData.optionContract,
-      totalFee: 0n,
-      payout: 0n,
-      expirationPrice: 0n,
-      settlementFee: 0n,
-      optionID: event.args.optionId,
-    },
-  });
+  try {
+    await UserOptionData.update({
+      id: getId(event.args.targetContract, event.args.optionId),
+      data: (ref) => {
+        return {
+          ...ref.current,
+
+          optionID: event.args.optionId,
+          user: queuedOptionData.user,
+
+          queueID: queuedOptionData.queueID,
+          state: State.active,
+          expirationTime: queuedOptionData.expirationTime,
+          isAbove: queuedOptionData.isAbove,
+          creationTime: queuedOptionData.queueTimestamp,
+          queuedTimestamp: queuedOptionData.queueTimestamp,
+          lag: queuedOptionData.lag,
+          strike: queuedOptionData.strike,
+          optionContract: queuedOptionData.optionContract,
+        };
+      },
+    });
+  } catch (e) {
+    console.log("error in", event.args.targetContract, event.args.optionId);
+  }
 });

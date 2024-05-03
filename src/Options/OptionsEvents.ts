@@ -1,6 +1,7 @@
 import { ponder } from "@/generated";
 import { getId } from "../Utils/getId";
-import { State } from "../Configs/StateEnum";
+import { State } from "../RepoConfigs/StateEnum";
+import { zeroAddress } from "viem";
 
 ponder.on("Options:Create", async (eventArgs) => {
   const { event, context } = eventArgs;
@@ -11,15 +12,25 @@ ponder.on("Options:Create", async (eventArgs) => {
   });
   if (!optionContractInstance) return;
 
-  await UserOptionData.update({
+  await UserOptionData.create({
     id: getId(optionContractAddress, event.args.id),
-    data: (ref) => {
-      return {
-        ...ref.current,
-        totalFee: event.args.totalFee,
-        settlementFee: event.args.settlementFee,
-        amount: event.args.amount,
-      };
+    data: {
+      totalFee: event.args.totalFee,
+      settlementFee: event.args.settlementFee,
+      amount: event.args.amount,
+      queueID: 0n,
+      user: zeroAddress,
+      state: State.active,
+      expirationTime: 0n,
+      isAbove: false,
+      creationTime: 0n,
+      queuedTimestamp: 0n,
+      lag: 0n,
+      strike: 0n,
+      optionContract: zeroAddress,
+      payout: 0n,
+      expirationPrice: 0n,
+      optionID: 0n,
     },
   });
   const marketId = getId(event.args.marketId, optionContractAddress);
