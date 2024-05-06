@@ -86,7 +86,7 @@ ponder.on("Options:CreateOptionsContract", async (args) => {
       poolContract: args.event.args.pool,
       routerContract: zeroAddress,
       openDown: 0n,
-      configContract: args.event.args.config,
+      configContractId: args.event.args.config,
       openUp: 0n,
       openInterestDown: 0n,
       openInterestUp: 0n,
@@ -94,6 +94,22 @@ ponder.on("Options:CreateOptionsContract", async (args) => {
       pool: loadedToken.token,
       poolTokenId: loadedToken.id,
       asset: args.event.args.token0 + args.event.args.token1,
+    }),
+  });
+});
+ponder.on("Options:Pause", async (args) => {
+  const { OptionContract } = args.context.db;
+  const optionContractInstance = await OptionContract.findUnique({
+    id: args.event.log.address,
+  });
+  if (!optionContractInstance || !optionContractInstance.register) return;
+
+  //   read call to get pool
+  await OptionContract.update({
+    id: args.event.log.address,
+    data: (ref) => ({
+      ...ref.current,
+      isPaused: args.event.args.isPaused,
     }),
   });
 });

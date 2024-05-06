@@ -27,7 +27,7 @@ ponder.on("Options:Create", async (eventArgs) => {
       queuedTimestamp: 0n,
       lag: 0n,
       strike: 0n,
-      optionContract: zeroAddress,
+      optionContractId: optionContractAddress,
       payout: 0n,
       expirationPrice: 0n,
       optionID: 0n,

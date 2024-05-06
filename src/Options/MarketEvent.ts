@@ -15,7 +15,7 @@ ponder.on("Options:CreateMarket", async (eventArgs) => {
   Market.create({
     id: marketId,
     data: {
-      optionContract: optionContractAddress,
+      optionContractId: optionContractAddress,
       skew: 0n,
       marketId: event.args.marketId,
       strike: event.args.strike,

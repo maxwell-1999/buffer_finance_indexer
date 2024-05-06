@@ -15,7 +15,7 @@ ponder.on("Router:InitiateTrade", async (eventArgs) => {
   await QueuedOptionData.create({
     id: getId(optionContract, queueId),
     data: {
-      optionContract: optionContract,
+      optionContractId: optionContract,
       queueID: queueId,
       user: event.args.user,
       lag: 0n,
@@ -63,7 +63,7 @@ ponder.on("Router:OpenTrade", async (eventArgs) => {
         queuedTimestamp: queuedOptionData.queueTimestamp,
         lag: queuedOptionData.lag,
         strike: queuedOptionData.strike,
-        optionContract: queuedOptionData.optionContract,
+        optionContractId: queuedOptionData.optionContractId,
       };
     },
   });
