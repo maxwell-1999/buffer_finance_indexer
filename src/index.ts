@@ -14,6 +14,7 @@ ponder.on("Router:ContractRegistryUpdated", (args) => {
     data: {
       ...emptyOptionContract(event.args.targetContract),
       register: event.args.register,
+      routerContract: event.log.address,
     },
   });
 });
@@ -82,14 +83,8 @@ ponder.on("Options:CreateOptionsContract", async (args) => {
       address: args.event.log.address,
       token0: args.event.args.token0,
       token1: args.event.args.token1,
-      isPaused: false,
       poolContract: args.event.args.pool,
-      routerContract: zeroAddress,
-      openDown: 0n,
       configContractId: args.event.args.config,
-      openUp: 0n,
-      openInterestDown: 0n,
-      openInterestUp: 0n,
       category: args.event.args.category,
       pool: loadedToken.token,
       poolTokenId: loadedToken.id,
