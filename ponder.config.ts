@@ -4,6 +4,7 @@ import { http } from "viem";
 import { arbitrumSepolia } from "viem/chains";
 import OptionsAbi from "./abis/OptionsAbi";
 import RouterABI from "./abis/RouterAbi";
+import ConfigAbi from "./abis/ConfigAbi";
 export default createConfig({
   networks: {
     // mainnet: {
@@ -55,6 +56,15 @@ export default createConfig({
     },
     Router: {
       abi: RouterABI,
+      address: "0xc8083f764d5ce46E4DbEa3dEB975C3301c8d08aB",
+      network: {
+        arbitrumSepolia: {
+          startBlock: 38753772,
+        },
+      },
+    },
+    Config: {
+      abi: ConfigAbi,
       network: {
         arbitrumSepolia: {
           startBlock: 38753772,

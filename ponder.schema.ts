@@ -1,4 +1,5 @@
 import { createSchema } from "@ponder/core";
+import { register } from "module";
 
 export default createSchema((p) => ({
   Token: p.createTable({
@@ -9,18 +10,21 @@ export default createSchema((p) => ({
   }),
   OptionContract: p.createTable({
     id: p.hex(),
+    register: p.boolean(),
     address: p.hex(),
     token0: p.string(),
     token1: p.string(),
     isPaused: p.boolean(),
     poolContract: p.hex(),
     routerContract: p.hex(),
+    configContract: p.hex().optional().references("ConfigContract.id"),
+    configContractLink: p.one("configContract"),
     openUp: p.bigint(),
     openDown: p.bigint(),
     openInterestUp: p.bigint(),
     openInterestDown: p.bigint(),
     pool: p.string(),
-    poolTokenId: p.hex().references("Token.id"),
+    poolTokenId: p.hex().optional().references("Token.id"),
     poolTokenLink: p.one("poolTokenId"),
     category: p.int(),
     asset: p.string(),

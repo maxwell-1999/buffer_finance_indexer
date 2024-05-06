@@ -46,29 +46,25 @@ ponder.on("Router:OpenTrade", async (eventArgs) => {
       };
     },
   });
-  try {
-    await UserOptionData.update({
-      id: getId(event.args.targetContract, event.args.optionId),
-      data: (ref) => {
-        return {
-          ...ref.current,
+  await UserOptionData.update({
+    id: getId(event.args.targetContract, event.args.optionId),
+    data: (ref) => {
+      return {
+        ...ref.current,
 
-          optionID: event.args.optionId,
-          user: queuedOptionData.user,
+        optionID: event.args.optionId,
+        user: queuedOptionData.user,
 
-          queueID: queuedOptionData.queueID,
-          state: State.active,
-          expirationTime: queuedOptionData.expirationTime,
-          isAbove: queuedOptionData.isAbove,
-          creationTime: queuedOptionData.queueTimestamp,
-          queuedTimestamp: queuedOptionData.queueTimestamp,
-          lag: queuedOptionData.lag,
-          strike: queuedOptionData.strike,
-          optionContract: queuedOptionData.optionContract,
-        };
-      },
-    });
-  } catch (e) {
-    console.log("error in", event.args.targetContract, event.args.optionId);
-  }
+        queueID: queuedOptionData.queueID,
+        state: State.active,
+        expirationTime: queuedOptionData.expirationTime,
+        isAbove: queuedOptionData.isAbove,
+        creationTime: queuedOptionData.queueTimestamp,
+        queuedTimestamp: queuedOptionData.queueTimestamp,
+        lag: queuedOptionData.lag,
+        strike: queuedOptionData.strike,
+        optionContract: queuedOptionData.optionContract,
+      };
+    },
+  });
 });

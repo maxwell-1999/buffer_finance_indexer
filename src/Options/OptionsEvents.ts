@@ -10,8 +10,8 @@ ponder.on("Options:Create", async (eventArgs) => {
   const optionContractInstance = await OptionContract.findUnique({
     id: optionContractAddress,
   });
-  if (!optionContractInstance) return;
-
+  if (!optionContractInstance || !optionContractInstance.register) return;
+  console.log("CreationTime id", getId(optionContractAddress, event.args.id));
   await UserOptionData.create({
     id: getId(optionContractAddress, event.args.id),
     data: {
@@ -52,22 +52,19 @@ ponder.on("Options:Exercise", async (eventArgs) => {
   const optionContractInstance = await OptionContract.findUnique({
     id: optionContractAddress,
   });
-  if (!optionContractInstance) return;
-  try {
-    await UserOptionData.update({
-      id: getId(optionContractAddress, event.args.id),
-      data: (ref) => {
-        return {
-          ...ref.current,
-          state: State.exercised,
-          payout: event.args.profit,
-          expirationPrice: event.args.priceAtExpiration,
-        };
-      },
-    });
-  } catch (e) {
-    console.error("error in id", getId(optionContractAddress, event.args.id));
-  }
+  if (!optionContractInstance || !optionContractInstance.register) return;
+
+  await UserOptionData.update({
+    id: getId(optionContractAddress, event.args.id),
+    data: (ref) => {
+      return {
+        ...ref.current,
+        state: State.exercised,
+        payout: event.args.profit,
+        expirationPrice: event.args.priceAtExpiration,
+      };
+    },
+  });
   //   userOptionDataInstance.
 });
 ponder.on("Options:Expire", async (eventArgs) => {
@@ -77,20 +74,17 @@ ponder.on("Options:Expire", async (eventArgs) => {
   const optionContractInstance = await OptionContract.findUnique({
     id: optionContractAddress,
   });
-  if (!optionContractInstance) return;
-  try {
-    await UserOptionData.update({
-      id: getId(optionContractAddress, event.args.id),
-      data: (ref) => {
-        return {
-          ...ref.current,
-          state: State.expired,
-          expirationPrice: event.args.priceAtExpiration,
-        };
-      },
-    });
-  } catch (e) {
-    console.error("error in id", getId(optionContractAddress, event.args.id));
-  }
+  if (!optionContractInstance || !optionContractInstance.register) return;
+
+  await UserOptionData.update({
+    id: getId(optionContractAddress, event.args.id),
+    data: (ref) => {
+      return {
+        ...ref.current,
+        state: State.expired,
+        expirationPrice: event.args.priceAtExpiration,
+      };
+    },
+  });
   //   userOptionDataInstance.
 });

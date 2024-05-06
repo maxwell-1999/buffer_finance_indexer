@@ -8,7 +8,8 @@ ponder.on("Options:CreateMarket", async (eventArgs) => {
   const optionContractInstance = await OptionContract.findUnique({
     id: optionContractAddress,
   });
-  if (!optionContractInstance) return;
+  if (!optionContractInstance || !optionContractInstance.register) return;
+
   const marketId = getId(event.args.marketId, optionContractAddress);
 
   Market.create({
